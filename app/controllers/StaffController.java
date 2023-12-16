@@ -1,25 +1,25 @@
 package controllers;
 
-import model.Staff;
-import play.filters.csrf.*;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import play.mvc.With;
+import service.FileUploadService;
 import service.StaffService;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 public class StaffController extends Controller {
 
 
     private final StaffService staffService;
+    private final FileUploadService fileUploadService;
 
     @Inject
-    public StaffController(StaffService staffService) {
+    public StaffController(StaffService staffService, FileUploadService fileUploadService) {
         this.staffService = staffService;
+        this.fileUploadService = fileUploadService;
     }
 
     public CompletionStage<Result> addStaff(Http.Request request) {
@@ -40,5 +40,14 @@ public class StaffController extends Controller {
 
     public CompletionStage<Result> deleteStaff(Http.Request request,int id) {
         return staffService.deleteStaff(request,id);
+    }
+
+
+    public CompletionStage<Result> uploadFile(Http.Request request,int id) throws IOException {
+        return fileUploadService.uploadFile(request,id);
+    }
+
+    public CompletionStage<Result> uploadImage(Http.Request request,int id) throws IOException {
+        return fileUploadService.uploadImage(request,id);
     }
 }

@@ -9,7 +9,6 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
 import model.Staff;
-import play.filters.csrf.CSRF;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -130,7 +129,6 @@ public class StaffService {
         if (jwtToken.isEmpty()) {
             return null;
         }
-        //remove Bearer and space from token
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090)
                 .usePlaintext()
                 .build();
