@@ -32,15 +32,8 @@ public class AuthServiceImpl implements AuthService {
         generatedClasses.AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
         generatedClasses.RegisterResponseOuterClass.RegisterResponse registerResponse = authService
                 .register(generatedClasses.RegisterRequestOuterClass.RegisterRequest.newBuilder()
-                        .setUser(generatedClasses.UserOuterClass.User.newBuilder()
-                                .setUsername(registerRequest.getUsername())
-                                .setPassword(registerRequest.getPassword())
-                                .setName(registerRequest.getName())
-                                .setEmail(registerRequest.getEmail())
-                                .setPhone(registerRequest.getPhone())
-                                .build())
+                        .setUser(MapperConfig.INSTANCE.mapToUser(registerRequest))
                         .build());
-
         return CompletableFuture.completedFuture(ok(Json.toJson(registerResponse.getStatus())));
 
     }
