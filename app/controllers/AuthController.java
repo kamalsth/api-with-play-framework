@@ -23,14 +23,12 @@ public class AuthController extends Controller {
     }
 
     public CompletionStage<Result> login(Http.Request request) {
-        Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
-        return authService.login(loginRequest);
+        return authService.login(request);
     }
 
 
     public CompletionStage<Result> register(Http.Request request) {
-        Register registerRequest = Json.fromJson(request.body().asJson(), Register.class);
-        return authService.register(registerRequest);
+        return authService.register(request);
     }
 
 }
