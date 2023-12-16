@@ -32,4 +32,5 @@ public interface MapperConfig {
         return UserOuterClass.UserRole.valueOf(role);
     }
 
+    StaffOuterClass.Staff mapToStaffProto(Staff staff);
 }
