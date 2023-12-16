@@ -1,5 +1,6 @@
 package service.serviceimpl;
 
+import config.MapperConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import model.Login;
@@ -20,10 +21,8 @@ public class AuthServiceImpl implements AuthService {
         Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
         generatedClasses.AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
         generatedClasses.LoginResponseOuterClass.LoginResponse loginResponse = authService
-                .login(generatedClasses.LoginRequestOuterClass.LoginRequest.newBuilder()
-                        .setUsername(loginRequest.getUsername())
-                        .setPassword(loginRequest.getPassword())
-                        .build());
+                .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
+        ;
         return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
     }
 
