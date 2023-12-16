@@ -8,7 +8,7 @@ import service.serviceimpl.AuthServiceImpl;
 import service.serviceimpl.FileUploadServiceImpl;
 import service.serviceimpl.StaffServiceImpl;
 
-public class MyModule extends AbstractModule {
+public class ModuleConfig extends AbstractModule {
     @Override
     protected void configure() {
         bind(AuthService.class).to(AuthServiceImpl.class);
