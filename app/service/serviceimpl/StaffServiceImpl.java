@@ -30,7 +30,14 @@ public class StaffServiceImpl implements StaffService {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
         generatedClasses.StaffRequestOuterClass.StaffRequest staffRequest = generatedClasses.StaffRequestOuterClass.StaffRequest.newBuilder()
-                .setStaff(MapperConfig.INSTANCE.mapToStaffProto(staff))
+                .setStaff(generatedClasses.StaffOuterClass.Staff.newBuilder()
+                        .setName(staff.getName())
+                        .setPersonalPhone(staff.getPersonalPhone())
+                        .setEmergencyContactNumber(staff.getEmergencyContactNumber())
+                        .setPosition(staff.getPosition())
+                        .setJoinDate(staff.getJoinDate())
+                        .setContactRenewDate(staff.getContactRenewDate())
+                        .build())
                 .build();
 
         generatedClasses.StaffResponseOuterClass.StaffResponse staff2 = staffService.addStaff(staffRequest);
