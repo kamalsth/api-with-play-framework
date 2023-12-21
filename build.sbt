@@ -25,12 +25,8 @@ libraryDependencies += "com.typesafe.play" %% "play-json" % "2.10.3"
 libraryDependencies += "org.mapstruct" % "mapstruct" % "1.5.5.Final"
 libraryDependencies += "org.mapstruct" % "mapstruct-processor" % "1.5.5.Final"
 
-
-//libraryDependencies += "org.apache.pekko" %% "pekko-actor" % "1.0.2"
-
 libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.8.0"
 
-//libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.8.0"
 
 Compile / PB.targets := Seq(
   PB.gens.java -> (Compile / sourceManaged).value
