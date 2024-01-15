@@ -1,5 +1,7 @@
 package service.serviceimpl;
 
+import com.ks.proto.staff.FileUploadRequest;
+import com.ks.proto.staff.FileUploadServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -45,12 +47,12 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private CompletionStage<Result> uploadFile(Http.Request request, int staffId, boolean isImage) throws IOException {
         String filePath = storeFileAndImage(staffId, request);
-        generatedClasses.FileUploadServiceGrpc.FileUploadServiceBlockingStub stub = createUploadServiceStub(request);
+        FileUploadServiceGrpc.FileUploadServiceBlockingStub stub = createUploadServiceStub(request);
         if (stub == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
 
-        generatedClasses.FileUpload.FileUploadRequest fileUploadRequest = generatedClasses.FileUpload.FileUploadRequest.newBuilder()
+        FileUploadRequest fileUploadRequest = FileUploadRequest.newBuilder()
                 .setStaffId(staffId)
                 .setFilePath(filePath)
                 .build();
@@ -66,7 +68,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     }
 
-    private generatedClasses.FileUploadServiceGrpc.FileUploadServiceBlockingStub createUploadServiceStub(Http.Request request) {
+    private FileUploadServiceGrpc.FileUploadServiceBlockingStub createUploadServiceStub(Http.Request request) {
         String jwtToken = request.headers().get("Authorization").orElse("");
 
         if (jwtToken.isEmpty()) {
@@ -78,7 +80,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), jwtToken);
-        return generatedClasses.FileUploadServiceGrpc.newBlockingStub(managedChannel)
+        return FileUploadServiceGrpc.newBlockingStub(managedChannel)
                 .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
 
     }

@@ -1,5 +1,7 @@
 package service.serviceimpl;
 
+import com.ks.proto.common.StatusResponse;
+import com.ks.proto.staff.*;
 import config.MapperConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -25,12 +27,12 @@ public class StaffServiceImpl implements StaffService {
     public CompletionStage<Result> addStaff(Http.Request request) {
         Staff staff = Json.fromJson(request.body().asJson(), Staff.class);
 
-        generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        generatedClasses.StaffRequestOuterClass.StaffRequest staffRequest = generatedClasses.StaffRequestOuterClass.StaffRequest.newBuilder()
-                .setStaff(generatedClasses.StaffOuterClass.Staff.newBuilder()
+        StaffRequest staffRequest = StaffRequest.newBuilder()
+                .setStaff(com.ks.proto.staff.Staff.newBuilder()
                         .setName(staff.getName())
                         .setPersonalPhone(staff.getPersonalPhone())
                         .setEmergencyContactNumber(staff.getEmergencyContactNumber())
@@ -40,7 +42,7 @@ public class StaffServiceImpl implements StaffService {
                         .build())
                 .build();
 
-        generatedClasses.StaffResponseOuterClass.StaffResponse staff2 = staffService.addStaff(staffRequest);
+        StaffResponse staff2 = staffService.addStaff(staffRequest);
 
 
         Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
@@ -51,14 +53,14 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public CompletionStage<Result> getStaffById(Http.Request request, int id) {
 
-        generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        generatedClasses.StaffRequestOuterClass.StaffRequest1 staffRequest = generatedClasses.StaffRequestOuterClass.StaffRequest1.newBuilder()
+        StaffRequestById staffRequest = StaffRequestById.newBuilder()
                 .setStaffId(id)
                 .build();
-        generatedClasses.StaffResponseOuterClass.StaffResponse staff2 = staffService.getStaffInfo(staffRequest);
+        StaffResponse staff2 = staffService.getStaffInfo(staffRequest);
 
         Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
         return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
@@ -69,12 +71,12 @@ public class StaffServiceImpl implements StaffService {
     public CompletionStage<Result> updateStaff(Http.Request request, int id) {
         Staff staff = Json.fromJson(request.body().asJson(), Staff.class);
 
-        generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        generatedClasses.StaffRequestOuterClass.StaffRequest staffRequest = generatedClasses.StaffRequestOuterClass.StaffRequest.newBuilder()
-                .setStaff(generatedClasses.StaffOuterClass.Staff.newBuilder()
+        StaffRequest staffRequest = StaffRequest.newBuilder()
+                .setStaff(com.ks.proto.staff.Staff.newBuilder()
                         .setStaffId(id)
                         .setName(staff.getName())
                         .setPersonalPhone(staff.getPersonalPhone())
@@ -85,7 +87,7 @@ public class StaffServiceImpl implements StaffService {
                         .build())
                 .build();
 
-        generatedClasses.StaffResponseOuterClass.StaffResponse staff2 = staffService.updateStaff(staffRequest);
+        StaffResponse staff2 = staffService.updateStaff(staffRequest);
 
         Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
         return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
@@ -94,14 +96,14 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public CompletionStage<Result> deleteStaff(Http.Request request, int id) {
-        generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        generatedClasses.StaffRequestOuterClass.StaffRequest1 staffRequest = generatedClasses.StaffRequestOuterClass.StaffRequest1.newBuilder()
+        StaffRequestById staffRequest = StaffRequestById.newBuilder()
                 .setStaffId(id)
                 .build();
-        generatedClasses.StatusResponseOuterClass.StatusResponse statusResponse = staffService.removeStaff(staffRequest);
+        StatusResponse statusResponse = staffService.removeStaff(staffRequest);
 
         return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
     }
@@ -110,24 +112,25 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public CompletionStage<Result> getAllStaff(Http.Request request) {
 
-        generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        generatedClasses.StaffListRequestOuterClass.StaffListRequest staffRequest = generatedClasses.StaffListRequestOuterClass.StaffListRequest.newBuilder()
+        StaffListRequest staffRequest = StaffListRequest.newBuilder()
                 .build();
 
         List<Staff> staffList = new ArrayList<>();
-        generatedClasses.StaffListResponseOuterClass.StaffListResponse staffListResponse = staffService
+        StaffListResponse staffListResponse = staffService
                 .getAllStaffInfo(staffRequest).next();
-        staffListResponse.getStaffList().forEach(staff ->
+
+        staffListResponse.getStaffListList().forEach(staff ->
                 staffList.add(MapperConfig.INSTANCE.mapToListStaff(staff))
         );
         return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
     }
 
 
-    private generatedClasses.StaffServiceGrpc.StaffServiceBlockingStub createStaffServiceStub(Http.Request request) {
+    private StaffServiceGrpc.StaffServiceBlockingStub createStaffServiceStub(Http.Request request) {
         String jwtToken = request.headers().get("Authorization").orElse("");
 
         if (jwtToken.isEmpty()) {
@@ -140,7 +143,7 @@ public class StaffServiceImpl implements StaffService {
         Metadata metadata = new Metadata();
         metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), jwtToken);
 
-        return generatedClasses.StaffServiceGrpc.newBlockingStub(managedChannel)
+        return StaffServiceGrpc.newBlockingStub(managedChannel)
                 .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
 
     }
