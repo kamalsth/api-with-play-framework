@@ -1,6 +1,5 @@
 package service.serviceimpl;
 
-import com.google.protobuf.Empty;
 import com.ks.proto.common.StatusResponse;
 import com.ks.proto.leave.*;
 import config.MapperConfig;
