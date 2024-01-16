@@ -15,7 +15,12 @@ POST    /uploadFile             controllers.StaffController.uploadFile(request: 
 POST    /uploadImage             controllers.StaffController.uploadImage(request: Request,id:Int)
 
 
-
+POST     /leaveRequest             controllers.LeaveController.leaveRequest(request: Request)
+GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request)
+GET       /getLeaveRequestById     controllers.LeaveController.getLeaveRequestById(request: Request, id:String)
+PUT       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, id:String)
+DELETE    /deleteLeaveRequest      controllers.LeaveController.deleteLeaveRequest(request: Request, id:String)
+PUT       /confirmLeaveRequest     controllers.LeaveController.confirmLeaveRequest(request: Request)
 
 
 
