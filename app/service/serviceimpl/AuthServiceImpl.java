@@ -1,5 +1,9 @@
 package service.serviceimpl;
 
+import com.ks.proto.auth.AuthServiceGrpc;
+import com.ks.proto.auth.LoginResponse;
+import com.ks.proto.auth.RegisterRequest;
+import com.ks.proto.common.StatusResponse;
 import config.MapperConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -19,8 +23,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CompletionStage<Result> login(Http.Request request) {
         Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
-        generatedClasses.AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
-        generatedClasses.LoginResponseOuterClass.LoginResponse loginResponse = authService
+        AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
+        LoginResponse loginResponse = authService
                 .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
         ;
         return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
@@ -29,20 +33,20 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CompletionStage<Result> register(Http.Request request) {
         Register registerRequest = Json.fromJson(request.body().asJson(), Register.class);
-        generatedClasses.AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
-        generatedClasses.RegisterResponseOuterClass.RegisterResponse registerResponse = authService
-                .register(generatedClasses.RegisterRequestOuterClass.RegisterRequest.newBuilder()
+        AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
+        StatusResponse registerResponse = authService
+                .register(RegisterRequest.newBuilder()
                         .setUser(MapperConfig.INSTANCE.mapToUser(registerRequest))
                         .build());
         return CompletableFuture.completedFuture(ok(Json.toJson(registerResponse.getStatus())));
 
     }
 
-    private generatedClasses.AuthServiceGrpc.AuthServiceBlockingStub createAuthServiceStub() {
+    private AuthServiceGrpc.AuthServiceBlockingStub createAuthServiceStub() {
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090)
                 .usePlaintext()
                 .build();
 
-        return generatedClasses.AuthServiceGrpc.newBlockingStub(managedChannel);
+        return AuthServiceGrpc.newBlockingStub(managedChannel);
     }
 }

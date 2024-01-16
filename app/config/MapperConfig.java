@@ -1,9 +1,13 @@
 package config;
 
-import generatedClasses.LoginRequestOuterClass;
-import generatedClasses.StaffOuterClass;
-import generatedClasses.StaffResponseOuterClass;
-import generatedClasses.UserOuterClass;
+import com.ks.proto.auth.LoginRequest;
+import com.ks.proto.leave.ConfirmLeaveRequest;
+import com.ks.proto.leave.LeaveResponse;
+import com.ks.proto.leave.LeaveStatus;
+import com.ks.proto.staff.StaffResponse;
+import com.ks.proto.user.User;
+import com.ks.proto.user.UserRole;
+import model.LeaveRequestModel;
 import model.Login;
 import model.Register;
 import model.Staff;
@@ -19,18 +23,37 @@ public interface MapperConfig {
     @Inject
     MapperConfig INSTANCE = Mappers.getMapper(MapperConfig.class);
 
-    Staff mapToStaff(StaffResponseOuterClass.StaffResponse staff2);
+    Staff mapToStaff(StaffResponse staff2);
 
-    Staff mapToListStaff(StaffOuterClass.Staff staff);
+    Staff mapToListStaff(com.ks.proto.staff.Staff staff);
 
-    LoginRequestOuterClass.LoginRequest mapToLoginRequest(Login loginRequest);
+   LoginRequest mapToLoginRequest(Login loginRequest);
 
     @Mapping(source = "role", target = "role", qualifiedByName = "mapStringToRole")
-    UserOuterClass.User mapToUser(Register registerRequest);
+    User mapToUser(Register registerRequest);
     @Named("mapStringToRole")
-    default UserOuterClass.UserRole mapStringToRole(String role) {
-        return UserOuterClass.UserRole.valueOf(role);
+    default UserRole mapStringToRole(String role) {
+        return UserRole.valueOf(role);
     }
 
-    StaffOuterClass.Staff mapToStaffProto(Staff staff);
+   com.ks.proto.staff.Staff mapToStaffProto(Staff staff);
+
+    @Mapping(source = "leaveStatus", target = "status", qualifiedByName = "mapLeaveStatusToString")
+    LeaveRequestModel mapToLeaveRequestModel(LeaveResponse leaveResponse);
+
+    @Named("mapLeaveStatusToString")
+    default String mapLeaveStatusToString(LeaveStatus leaveStatus) {
+        return leaveStatus.name();
+    }
+
+    @Mapping(source = "status", target = "leaveStatus", qualifiedByName = "mapStringToLeaveStatus")
+    LeaveResponse mapToLeaveRequestProto(LeaveRequestModel leaveRequestModel);
+
+    @Named("mapStringToLeaveStatus")
+    default LeaveStatus mapStringToLeaveStatus(String leaveStatus) {
+        return LeaveStatus.valueOf(leaveStatus);
+    }
+
+    @Mapping(source = "leaveStatus", target = "leaveStatus", qualifiedByName = "mapStringToLeaveStatus")
+    ConfirmLeaveRequest mapToConfirmLEaveRequestProto(model.ConfirmLeaveRequest confirmLeaveRequest);
 }
