@@ -23,18 +23,18 @@ import static play.mvc.Results.ok;
 
 public class FileUploadServiceImpl implements FileUploadService {
     @Override
-    public CompletionStage<Result> uploadFile(Http.Request request, int staffId) throws IOException {
+    public CompletionStage<Result> uploadFile(Http.Request request, String staffId) throws IOException {
         return uploadFile(request, staffId, false);
     }
 
 
     @Override
-    public CompletionStage<Result> uploadImage(Http.Request request, int staffId) throws IOException {
+    public CompletionStage<Result> uploadImage(Http.Request request, String staffId) throws IOException {
         return uploadFile(request, staffId, true);
     }
 
 
-    private String storeFileAndImage(int staffId, Http.Request request) throws IOException {
+    private String storeFileAndImage(String staffId, Http.Request request) throws IOException {
         String UploadDir = "/media/kamal/Software/Treeleaf/output";
         Http.MultipartFormData<Files.TemporaryFile> body = request.body().asMultipartFormData();
         Http.MultipartFormData.FilePart<Files.TemporaryFile> file = body.getFile("file");
@@ -45,7 +45,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     }
 
-    private CompletionStage<Result> uploadFile(Http.Request request, int staffId, boolean isImage) throws IOException {
+    private CompletionStage<Result> uploadFile(Http.Request request, String staffId, boolean isImage) throws IOException {
         String filePath = storeFileAndImage(staffId, request);
         FileUploadServiceGrpc.FileUploadServiceBlockingStub stub = createUploadServiceStub(request);
         if (stub == null) {
