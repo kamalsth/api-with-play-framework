@@ -13,7 +13,7 @@ PUT     /updateStaff           controllers.StaffController.updateStaff(request: 
 DELETE  /deleteStaff             controllers.StaffController.deleteStaff(request: Request,id:Int)
 POST    /uploadFile             controllers.StaffController.uploadFile(request: Request,id:Int)
 POST    /uploadImage             controllers.StaffController.uploadImage(request: Request,id:Int)
-
+GET     /taxCalculation             controllers.StaffController.taxCalculation(request: Request,id:Int)
 
 POST     /leaveRequest             controllers.LeaveController.leaveRequest(request: Request)
 GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request)

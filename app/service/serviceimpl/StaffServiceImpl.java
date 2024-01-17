@@ -39,6 +39,7 @@ public class StaffServiceImpl implements StaffService {
                         .setPosition(staff.getPosition())
                         .setJoinDate(staff.getJoinDate())
                         .setContactRenewDate(staff.getContactRenewDate())
+                        .setSalary(staff.getSalary())
                         .build())
                 .build();
 
@@ -127,6 +128,21 @@ public class StaffServiceImpl implements StaffService {
                 staffList.add(MapperConfig.INSTANCE.mapToListStaff(staff))
         );
         return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
+    }
+
+    @Override
+    public CompletionStage<Result> taxCalculation(Http.Request request, int id) {
+        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+        if (staffService == null) {
+            return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
+        }
+        StaffRequestById staffRequest = StaffRequestById.newBuilder()
+                .setStaffId(id)
+                .build();
+        TaxResponse taxResponse = staffService.taxCalculation(staffRequest);
+
+
+        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTax(taxResponse))));
     }
 
 

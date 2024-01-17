@@ -5,12 +5,10 @@ import com.ks.proto.leave.ConfirmLeaveRequest;
 import com.ks.proto.leave.LeaveResponse;
 import com.ks.proto.leave.LeaveStatus;
 import com.ks.proto.staff.StaffResponse;
+import com.ks.proto.staff.TaxResponse;
 import com.ks.proto.user.User;
 import com.ks.proto.user.UserRole;
-import model.LeaveRequestModel;
-import model.Login;
-import model.Register;
-import model.Staff;
+import model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -56,4 +54,6 @@ public interface MapperConfig {
 
     @Mapping(source = "leaveStatus", target = "leaveStatus", qualifiedByName = "mapStringToLeaveStatus")
     ConfirmLeaveRequest mapToConfirmLEaveRequestProto(model.ConfirmLeaveRequest confirmLeaveRequest);
+
+    Tax mapToTax(TaxResponse taxResponse);
 }

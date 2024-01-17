@@ -14,5 +14,5 @@ public interface StaffService {
     public CompletionStage<Result> getAllStaff(Http.Request request);
 
 
-
+    CompletionStage<Result> taxCalculation(Http.Request request, int id);
 }

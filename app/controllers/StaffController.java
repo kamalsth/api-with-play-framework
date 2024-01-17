@@ -50,4 +50,8 @@ public class StaffController extends Controller {
     public CompletionStage<Result> uploadImage(Http.Request request,int id) throws IOException {
         return fileUploadService.uploadImage(request,id);
     }
+
+    public CompletionStage<Result> taxCalculation(Http.Request request,int id) {
+        return staffService.taxCalculation(request,id);
+    }
 }
