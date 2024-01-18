@@ -26,7 +26,6 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public CompletionStage<Result> addStaff(Http.Request request) {
         Staff staff = Json.fromJson(request.body().asJson(), Staff.class);
-
         StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
@@ -39,11 +38,13 @@ public class StaffServiceImpl implements StaffService {
                         .setPosition(staff.getPosition())
                         .setJoinDate(staff.getJoinDate())
                         .setContactRenewDate(staff.getContactRenewDate())
+                        .setSalary(staff.getSalary())
+                        .setMaritalStatus(MaritalStatus.valueOf(staff.getMaritalStatus().name()))
+                        .setEmail(staff.getEmail())
                         .build())
                 .build();
 
         StaffResponse staff2 = staffService.addStaff(staffRequest);
-
 
         Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
         return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
@@ -51,7 +52,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public CompletionStage<Result> getStaffById(Http.Request request, int id) {
+    public CompletionStage<Result> getStaffById(Http.Request request, String id) {
 
         StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
@@ -68,7 +69,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public CompletionStage<Result> updateStaff(Http.Request request, int id) {
+    public CompletionStage<Result> updateStaff(Http.Request request, String id) {
         Staff staff = Json.fromJson(request.body().asJson(), Staff.class);
 
         StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
@@ -84,6 +85,9 @@ public class StaffServiceImpl implements StaffService {
                         .setPosition(staff.getPosition())
                         .setJoinDate(staff.getJoinDate())
                         .setContactRenewDate(staff.getContactRenewDate())
+                        .setSalary(staff.getSalary())
+                        .setMaritalStatus(MaritalStatus.valueOf(staff.getMaritalStatus().name()))
+                        .setEmail(staff.getEmail())
                         .build())
                 .build();
 
@@ -95,7 +99,7 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public CompletionStage<Result> deleteStaff(Http.Request request, int id) {
+    public CompletionStage<Result> deleteStaff(Http.Request request, String id) {
         StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
@@ -127,6 +131,52 @@ public class StaffServiceImpl implements StaffService {
                 staffList.add(MapperConfig.INSTANCE.mapToListStaff(staff))
         );
         return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
+    }
+
+//    @Override
+//    public CompletionStage<Result> taxCalculation(Http.Request request, String id) {
+//        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+//        if (staffService == null) {
+//            return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
+//        }
+//        StaffRequestById staffRequest = StaffRequestById.newBuilder()
+//                .setStaffId(id)
+//                .build();
+//
+//        TaxResponse taxResponse = staffService.taxCalculation(staffRequest);
+//
+//
+//        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTax(taxResponse))));
+//    }
+
+    @Override
+    public CompletionStage<Result> taxCalculation(Http.Request request, String id) {
+        TaxServiceGrpc.TaxServiceBlockingStub taxServiceStub = createTaxServiceStub(request);
+        if (taxServiceStub == null) {
+            return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
+        }
+        StaffRequestById staffRequest = StaffRequestById.newBuilder()
+                .setStaffId(id)
+                .build();
+
+
+        TaxCalResponse taxResponse = taxServiceStub.calculateTax(staffRequest);
+
+        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTaxCal(taxResponse))));
+    }
+
+    private TaxServiceGrpc.TaxServiceBlockingStub createTaxServiceStub(Http.Request request) {
+        String jwtToken = request.headers().get("Authorization").orElse("");
+        if (jwtToken.isEmpty()) {
+            return null;
+        }
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090)
+                .usePlaintext()
+                .build();
+        Metadata metadata = new Metadata();
+        metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), jwtToken);
+        return TaxServiceGrpc.newBlockingStub(managedChannel)
+                .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
 

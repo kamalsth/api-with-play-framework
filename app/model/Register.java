@@ -1,7 +1,7 @@
 package model;
 
 public class Register {
-    private int userId;
+    private String userId;
     private String username;
     private String password;
     private String name;
@@ -10,7 +10,7 @@ public class Register {
     private Role role;
 
 
-    public Register(int userId, String username, String password, String name, String email, String phone, Role role) {
+    public Register(String userId, String username, String password, String name, String email, String phone, Role role) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -25,11 +25,11 @@ public class Register {
         
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -79,5 +79,19 @@ public class Register {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Register{" +
+                "userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
