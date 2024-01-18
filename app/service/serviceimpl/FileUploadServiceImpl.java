@@ -57,12 +57,10 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .setFilePath(filePath)
                 .build();
         if (isImage) {
-            stub.uploadImage(fileUploadRequest);
-            return CompletableFuture.completedFuture(ok("Image upload successfully"));
+            return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadImage(fileUploadRequest).getUploadStatus())));
 
         } else {
-            stub.uploadFile(fileUploadRequest);
-            return CompletableFuture.completedFuture(ok(Json.toJson("FileUpload successfully")));
+            return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadFile(fileUploadRequest).getUploadStatus())));
 
         }
 
