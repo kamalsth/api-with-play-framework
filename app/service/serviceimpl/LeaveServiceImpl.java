@@ -38,7 +38,6 @@ public class LeaveServiceImpl implements LeaveService {
                 .setSubject(leaveRequestModel.getSubject())
                 .build();
 
-        System.out.println("leaveRequest=" + leaveRequest);
         LeaveResponse leaveResponse = leaveService.requestLeave(leaveRequest);
         LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
         return CompletableFuture.completedFuture(ok(Json.toJson(model)));
