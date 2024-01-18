@@ -5,6 +5,7 @@ import com.ks.proto.leave.ConfirmLeaveRequest;
 import com.ks.proto.leave.LeaveResponse;
 import com.ks.proto.leave.LeaveStatus;
 import com.ks.proto.staff.StaffResponse;
+import com.ks.proto.staff.TaxCalResponse;
 import com.ks.proto.staff.TaxResponse;
 import com.ks.proto.user.User;
 import com.ks.proto.user.UserRole;
@@ -71,4 +72,6 @@ public interface MapperConfig {
     ConfirmLeaveRequest mapToConfirmLEaveRequestProto(model.ConfirmLeaveRequest confirmLeaveRequest);
 
     Tax mapToTax(TaxResponse taxResponse);
+
+    TaxCalculation mapToTaxCal(TaxCalResponse taxResponse);
 }

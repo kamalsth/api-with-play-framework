@@ -133,19 +133,50 @@ public class StaffServiceImpl implements StaffService {
         return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
     }
 
+//    @Override
+//    public CompletionStage<Result> taxCalculation(Http.Request request, String id) {
+//        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
+//        if (staffService == null) {
+//            return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
+//        }
+//        StaffRequestById staffRequest = StaffRequestById.newBuilder()
+//                .setStaffId(id)
+//                .build();
+//
+//        TaxResponse taxResponse = staffService.taxCalculation(staffRequest);
+//
+//
+//        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTax(taxResponse))));
+//    }
+
     @Override
     public CompletionStage<Result> taxCalculation(Http.Request request, String id) {
-        StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
-        if (staffService == null) {
+        TaxServiceGrpc.TaxServiceBlockingStub taxServiceStub = createTaxServiceStub(request);
+        if (taxServiceStub == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
         StaffRequestById staffRequest = StaffRequestById.newBuilder()
                 .setStaffId(id)
                 .build();
-        TaxResponse taxResponse = staffService.taxCalculation(staffRequest);
 
 
-        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTax(taxResponse))));
+        TaxCalResponse taxResponse = taxServiceStub.calculateTax(staffRequest);
+
+        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTaxCal(taxResponse))));
+    }
+
+    private TaxServiceGrpc.TaxServiceBlockingStub createTaxServiceStub(Http.Request request) {
+        String jwtToken = request.headers().get("Authorization").orElse("");
+        if (jwtToken.isEmpty()) {
+            return null;
+        }
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress("localhost", 9090)
+                .usePlaintext()
+                .build();
+        Metadata metadata = new Metadata();
+        metadata.put(Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER), jwtToken);
+        return TaxServiceGrpc.newBlockingStub(managedChannel)
+                .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
     }
 
 
