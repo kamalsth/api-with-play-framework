@@ -15,9 +15,8 @@ public class Staff {
     private double salary;
     private MaritalStatus maritalStatus;
     private String email;
-    private String userId;
 
-    public Staff(String staffId, String name, String personalPhone, String emergencyContactNumber, String position, String citizenshipPhoto, String contactDocPdf, String joinDate, String contactRenewDate, double salary, MaritalStatus maritalStatus, String email, String userId) {
+    public Staff(String staffId, String name, String personalPhone, String emergencyContactNumber, String position, String citizenshipPhoto, String contactDocPdf, String joinDate, String contactRenewDate, double salary, MaritalStatus maritalStatus, String email) {
         this.staffId = staffId;
         this.name = name;
         this.personalPhone = personalPhone;
@@ -30,10 +29,9 @@ public class Staff {
         this.salary = salary;
         this.maritalStatus = maritalStatus;
         this.email = email;
-        this.userId = userId;
     }
 
-    public Staff() {
+    public Staff(){
 
     }
 
@@ -133,30 +131,5 @@ public class Staff {
         this.email = email;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    @Override
-    public String toString() {
-        return "Staff{" +
-                "staffId='" + staffId + '\'' +
-                ", name='" + name + '\'' +
-                ", personalPhone='" + personalPhone + '\'' +
-                ", emergencyContactNumber='" + emergencyContactNumber + '\'' +
-                ", position='" + position + '\'' +
-                ", citizenshipPhoto='" + citizenshipPhoto + '\'' +
-                ", contactDocPdf='" + contactDocPdf + '\'' +
-                ", joinDate='" + joinDate + '\'' +
-                ", contactRenewDate='" + contactRenewDate + '\'' +
-                ", salary=" + salary +
-                ", maritalStatus=" + maritalStatus +
-                ", email='" + email + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
-    }
 }
