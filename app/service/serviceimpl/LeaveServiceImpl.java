@@ -3,7 +3,6 @@ package service.serviceimpl;
 import com.ks.proto.common.StatusResponse;
 import com.ks.proto.leave.*;
 import config.MapperConfig;
-import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -22,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static play.mvc.Results.ok;
-import static play.mvc.Results.status;
 
 public class LeaveServiceImpl implements LeaveService {
     @Override
