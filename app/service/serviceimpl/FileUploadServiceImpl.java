@@ -13,6 +13,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import service.FileUploadService;
+import utils.ExceptionUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static play.mvc.Results.ok;
+import static play.mvc.Results.status;
 
 public class FileUploadServiceImpl implements FileUploadService {
     @Override
@@ -66,9 +68,8 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             }
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
-
     }
 
     private FileUploadServiceGrpc.FileUploadServiceBlockingStub createUploadServiceStub(Http.Request request) {

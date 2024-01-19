@@ -5,7 +5,6 @@ import com.ks.proto.auth.LoginResponse;
 import com.ks.proto.auth.RegisterRequest;
 import com.ks.proto.common.StatusResponse;
 import config.MapperConfig;
-import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import model.Login;
@@ -14,6 +13,7 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import service.AuthService;
+import utils.ExceptionUtils;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -31,9 +31,10 @@ public class AuthServiceImpl implements AuthService {
                     .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
             return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(forbidden(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
+
 
     @Override
     public CompletionStage<Result> register(Http.Request request) {
@@ -46,8 +47,9 @@ public class AuthServiceImpl implements AuthService {
                             .build());
             return CompletableFuture.completedFuture(ok(Json.toJson(registerResponse.getStatus())));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
+        
 
     }
 

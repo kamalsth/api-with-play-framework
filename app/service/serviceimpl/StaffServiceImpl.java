@@ -14,6 +14,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import service.StaffService;
+import utils.ExceptionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class StaffServiceImpl implements StaffService {
             Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
             return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
@@ -70,7 +71,7 @@ public class StaffServiceImpl implements StaffService {
             Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
             return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
@@ -103,7 +104,7 @@ public class StaffServiceImpl implements StaffService {
             Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
             return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
@@ -121,7 +122,7 @@ public class StaffServiceImpl implements StaffService {
             StatusResponse statusResponse = staffService.removeStaff(staffRequest);
             return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
@@ -145,7 +146,7 @@ public class StaffServiceImpl implements StaffService {
             );
             return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
@@ -179,7 +180,7 @@ public class StaffServiceImpl implements StaffService {
             TaxCalResponse taxResponse = taxServiceStub.calculateTax(staffRequest);
             return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTaxCal(taxResponse))));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return ExceptionUtils.handleException(e);
         }
     }
 
