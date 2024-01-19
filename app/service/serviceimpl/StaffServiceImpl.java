@@ -3,6 +3,7 @@ package service.serviceimpl;
 import com.ks.proto.common.StatusResponse;
 import com.ks.proto.staff.*;
 import config.MapperConfig;
+import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -13,6 +14,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import service.StaffService;
+import utils.ExceptionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +46,13 @@ public class StaffServiceImpl implements StaffService {
                         .build())
                 .build();
 
-        StaffResponse staff2 = staffService.addStaff(staffRequest);
-
-        Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
-        return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        try {
+            StaffResponse staff2 = staffService.addStaff(staffRequest);
+            Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
+            return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 
@@ -61,10 +66,13 @@ public class StaffServiceImpl implements StaffService {
         StaffRequestById staffRequest = StaffRequestById.newBuilder()
                 .setStaffId(id)
                 .build();
-        StaffResponse staff2 = staffService.getStaffInfo(staffRequest);
-
-        Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
-        return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        try {
+            StaffResponse staff2 = staffService.getStaffInfo(staffRequest);
+            Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
+            return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 
@@ -91,10 +99,13 @@ public class StaffServiceImpl implements StaffService {
                         .build())
                 .build();
 
-        StaffResponse staff2 = staffService.updateStaff(staffRequest);
-
-        Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
-        return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        try {
+            StaffResponse staff2 = staffService.updateStaff(staffRequest);
+            Staff staff3 = MapperConfig.INSTANCE.mapToStaff(staff2);
+            return CompletableFuture.completedFuture(ok(Json.toJson(staff3)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 
@@ -107,9 +118,12 @@ public class StaffServiceImpl implements StaffService {
         StaffRequestById staffRequest = StaffRequestById.newBuilder()
                 .setStaffId(id)
                 .build();
-        StatusResponse statusResponse = staffService.removeStaff(staffRequest);
-
-        return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        try {
+            StatusResponse statusResponse = staffService.removeStaff(staffRequest);
+            return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 
@@ -124,13 +138,16 @@ public class StaffServiceImpl implements StaffService {
                 .build();
 
         List<Staff> staffList = new ArrayList<>();
-        StaffListResponse staffListResponse = staffService
-                .getAllStaffInfo(staffRequest).next();
-
-        staffListResponse.getStaffListList().forEach(staff ->
-                staffList.add(MapperConfig.INSTANCE.mapToListStaff(staff))
-        );
-        return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
+        try {
+            StaffListResponse staffListResponse = staffService
+                    .getAllStaffInfo(staffRequest).next();
+            staffListResponse.getStaffListList().forEach(staff ->
+                    staffList.add(MapperConfig.INSTANCE.mapToListStaff(staff))
+            );
+            return CompletableFuture.completedFuture(ok(Json.toJson(staffList)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 //    @Override
@@ -159,10 +176,12 @@ public class StaffServiceImpl implements StaffService {
                 .setStaffId(id)
                 .build();
 
-
-        TaxCalResponse taxResponse = taxServiceStub.calculateTax(staffRequest);
-
-        return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTaxCal(taxResponse))));
+        try {
+            TaxCalResponse taxResponse = taxServiceStub.calculateTax(staffRequest);
+            return CompletableFuture.completedFuture(ok(Json.toJson(MapperConfig.INSTANCE.mapToTaxCal(taxResponse))));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
     private TaxServiceGrpc.TaxServiceBlockingStub createTaxServiceStub(Http.Request request) {

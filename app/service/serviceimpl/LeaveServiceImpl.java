@@ -13,6 +13,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import service.LeaveService;
+import utils.ExceptionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +39,15 @@ public class LeaveServiceImpl implements LeaveService {
                 .setSubject(leaveRequestModel.getSubject())
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.requestLeave(leaveRequest);
-        LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        try {
+            LeaveResponse leaveResponse = leaveService.requestLeave(leaveRequest);
+            LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+
+
+        }
 
 
     }
@@ -55,11 +62,15 @@ public class LeaveServiceImpl implements LeaveService {
 
         List<LeaveRequestModel> leaveRequestModels = new ArrayList<>();
 
-        LeaveListResponse leaveListResponse = leaveService.getLeaveList(com.google.protobuf.Empty.newBuilder().build()).next();
-        leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
-            leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
-        });
-        return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModels)));
+        try {
+            LeaveListResponse leaveListResponse = leaveService.getLeaveList(com.google.protobuf.Empty.newBuilder().build()).next();
+            leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
+                leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
+            });
+            return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModels)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
     @Override
@@ -74,9 +85,15 @@ public class LeaveServiceImpl implements LeaveService {
                 .setId(id)
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.getLeave(leaveRequest);
-        LeaveRequestModel leaveRequestModel = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModel)));
+        try {
+            LeaveResponse leaveResponse = leaveService.getLeave(leaveRequest);
+            LeaveRequestModel leaveRequestModel = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModel)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+
+
+        }
     }
 
     @Override
@@ -96,9 +113,13 @@ public class LeaveServiceImpl implements LeaveService {
                 .setSubject(leaveRequestModel.getSubject())
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.updateLeave(leaveRequest);
-        LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        try {
+            LeaveResponse leaveResponse = leaveService.updateLeave(leaveRequest);
+            LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
     @Override
@@ -113,8 +134,14 @@ public class LeaveServiceImpl implements LeaveService {
                 .setId(id)
                 .build();
 
-        StatusResponse statusResponse = leaveService.deleteLeave(leaveRequest);
-        return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        try {
+            StatusResponse statusResponse = leaveService.deleteLeave(leaveRequest);
+            return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+
+        }
     }
 
     @Override
@@ -125,8 +152,12 @@ public class LeaveServiceImpl implements LeaveService {
         if (leaveService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
-        StatusResponse statusResponse = leaveService.confirmLeave(MapperConfig.INSTANCE.mapToConfirmLEaveRequestProto(confirmLeaveRequest));
-        return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        try {
+            StatusResponse statusResponse = leaveService.confirmLeave(MapperConfig.INSTANCE.mapToConfirmLEaveRequestProto(confirmLeaveRequest));
+            return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
 

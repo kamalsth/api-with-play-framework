@@ -13,32 +13,43 @@ import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import service.AuthService;
+import utils.ExceptionUtils;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static play.mvc.Results.ok;
+import static play.mvc.Results.*;
 
 public class AuthServiceImpl implements AuthService {
     @Override
     public CompletionStage<Result> login(Http.Request request) {
         Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
-        AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
-        LoginResponse loginResponse = authService
-                .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
-        ;
-        return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
+
+        try {
+            AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
+            LoginResponse loginResponse = authService
+                    .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
+            return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
+
 
     @Override
     public CompletionStage<Result> register(Http.Request request) {
         Register registerRequest = Json.fromJson(request.body().asJson(), Register.class);
-        AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
-        StatusResponse registerResponse = authService
-                .register(RegisterRequest.newBuilder()
-                        .setUser(MapperConfig.INSTANCE.mapToUser(registerRequest))
-                        .build());
-        return CompletableFuture.completedFuture(ok(Json.toJson(registerResponse.getStatus())));
+        try {
+            AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
+            StatusResponse registerResponse = authService
+                    .register(RegisterRequest.newBuilder()
+                            .setUser(MapperConfig.INSTANCE.mapToUser(registerRequest))
+                            .build());
+            return CompletableFuture.completedFuture(ok(Json.toJson(registerResponse.getStatus())));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
+        
 
     }
 

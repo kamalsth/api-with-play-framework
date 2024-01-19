@@ -2,6 +2,7 @@ package service.serviceimpl;
 
 import com.ks.proto.staff.FileUploadRequest;
 import com.ks.proto.staff.FileUploadServiceGrpc;
+import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -12,6 +13,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import service.FileUploadService;
+import utils.ExceptionUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static play.mvc.Results.ok;
+import static play.mvc.Results.status;
 
 public class FileUploadServiceImpl implements FileUploadService {
     @Override
@@ -56,16 +59,17 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .setStaffId(staffId)
                 .setFilePath(filePath)
                 .build();
-        if (isImage) {
-            stub.uploadImage(fileUploadRequest);
-            return CompletableFuture.completedFuture(ok("Image upload successfully"));
+        try {
+            if (isImage) {
+                return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadImage(fileUploadRequest).getUploadStatus())));
 
-        } else {
-            stub.uploadFile(fileUploadRequest);
-            return CompletableFuture.completedFuture(ok(Json.toJson("FileUpload successfully")));
+            } else {
+                return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadFile(fileUploadRequest).getUploadStatus())));
 
+            }
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
         }
-
     }
 
     private FileUploadServiceGrpc.FileUploadServiceBlockingStub createUploadServiceStub(Http.Request request) {
