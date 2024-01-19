@@ -23,8 +23,9 @@ import static play.mvc.Results.*;
 public class AuthServiceImpl implements AuthService {
     @Override
     public CompletionStage<Result> login(Http.Request request) {
+        Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
+
         try {
-            Login loginRequest = Json.fromJson(request.body().asJson(), Login.class);
             AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
             LoginResponse loginResponse = authService
                     .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
@@ -36,8 +37,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public CompletionStage<Result> register(Http.Request request) {
+        Register registerRequest = Json.fromJson(request.body().asJson(), Register.class);
         try {
-            Register registerRequest = Json.fromJson(request.body().asJson(), Register.class);
             AuthServiceGrpc.AuthServiceBlockingStub authService = createAuthServiceStub();
             StatusResponse registerResponse = authService
                     .register(RegisterRequest.newBuilder()

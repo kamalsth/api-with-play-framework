@@ -3,6 +3,7 @@ package service.serviceimpl;
 import com.ks.proto.common.StatusResponse;
 import com.ks.proto.leave.*;
 import config.MapperConfig;
+import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -38,9 +39,13 @@ public class LeaveServiceImpl implements LeaveService {
                 .setSubject(leaveRequestModel.getSubject())
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.requestLeave(leaveRequest);
-        LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        try {
+            LeaveResponse leaveResponse = leaveService.requestLeave(leaveRequest);
+            LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+        }
 
 
     }
@@ -55,11 +60,15 @@ public class LeaveServiceImpl implements LeaveService {
 
         List<LeaveRequestModel> leaveRequestModels = new ArrayList<>();
 
-        LeaveListResponse leaveListResponse = leaveService.getLeaveList(com.google.protobuf.Empty.newBuilder().build()).next();
-        leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
-            leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
-        });
-        return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModels)));
+        try {
+            LeaveListResponse leaveListResponse = leaveService.getLeaveList(com.google.protobuf.Empty.newBuilder().build()).next();
+            leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
+                leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
+            });
+            return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModels)));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+        }
     }
 
     @Override
@@ -74,9 +83,13 @@ public class LeaveServiceImpl implements LeaveService {
                 .setId(id)
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.getLeave(leaveRequest);
-        LeaveRequestModel leaveRequestModel = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModel)));
+        try {
+            LeaveResponse leaveResponse = leaveService.getLeave(leaveRequest);
+            LeaveRequestModel leaveRequestModel = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModel)));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+        }
     }
 
     @Override
@@ -96,9 +109,13 @@ public class LeaveServiceImpl implements LeaveService {
                 .setSubject(leaveRequestModel.getSubject())
                 .build();
 
-        LeaveResponse leaveResponse = leaveService.updateLeave(leaveRequest);
-        LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
-        return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        try {
+            LeaveResponse leaveResponse = leaveService.updateLeave(leaveRequest);
+            LeaveRequestModel model = MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse);
+            return CompletableFuture.completedFuture(ok(Json.toJson(model)));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+        }
     }
 
     @Override
@@ -113,8 +130,13 @@ public class LeaveServiceImpl implements LeaveService {
                 .setId(id)
                 .build();
 
-        StatusResponse statusResponse = leaveService.deleteLeave(leaveRequest);
-        return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        try {
+            StatusResponse statusResponse = leaveService.deleteLeave(leaveRequest);
+            return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+        }
     }
 
     @Override
