@@ -18,8 +18,7 @@ import service.AuthService;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static play.mvc.Results.internalServerError;
-import static play.mvc.Results.ok;
+import static play.mvc.Results.*;
 
 public class AuthServiceImpl implements AuthService {
     @Override
@@ -31,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
                     .login(MapperConfig.INSTANCE.mapToLoginRequest(loginRequest));
             return CompletableFuture.completedFuture(ok(Json.toJson(loginResponse.getToken())));
         } catch (Exception e) {
-            return CompletableFuture.completedFuture(internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
+            return CompletableFuture.completedFuture(forbidden(Json.toJson(HandleGrpcException.handleGrpcException(e))));
         }
     }
 

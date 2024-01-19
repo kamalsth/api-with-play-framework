@@ -2,6 +2,7 @@ package service.serviceimpl;
 
 import com.ks.proto.staff.FileUploadRequest;
 import com.ks.proto.staff.FileUploadServiceGrpc;
+import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -56,12 +57,16 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .setStaffId(staffId)
                 .setFilePath(filePath)
                 .build();
-        if (isImage) {
-            return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadImage(fileUploadRequest).getUploadStatus())));
+        try {
+            if (isImage) {
+                return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadImage(fileUploadRequest).getUploadStatus())));
 
-        } else {
-            return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadFile(fileUploadRequest).getUploadStatus())));
+            } else {
+                return CompletableFuture.completedFuture(ok(Json.toJson(stub.uploadFile(fileUploadRequest).getUploadStatus())));
 
+            }
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(Results.internalServerError(Json.toJson(HandleGrpcException.handleGrpcException(e))));
         }
 
     }
