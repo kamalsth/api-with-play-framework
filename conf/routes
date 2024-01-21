@@ -8,7 +8,7 @@ POST    /login                      controllers.AuthController.login(request: Re
 POST    /register                   controllers.AuthController.register(request: Request)
 POST    /addStaff                   controllers.StaffController.addStaff(request: Request)
 GET     /getStaffById               controllers.StaffController.getStaffById(request: Request, staffId:String)
-GET     /getAllStaff                controllers.StaffController.getAllStaff(request: Request, pageNumber:Int, pageSize:Int)
+GET     /getAllStaff                controllers.StaffController.getAllStaff(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 PUT     /updateStaff                controllers.StaffController.updateStaff(request: Request, staffId:String)
 DELETE  /deleteStaff                controllers.StaffController.deleteStaff(request: Request,staffId:String)
 POST    /uploadFile                 controllers.StaffController.uploadFile(request: Request,staffId:String)
@@ -16,7 +16,7 @@ POST    /uploadImage                controllers.StaffController.uploadImage(requ
 GET     /taxCalculation             controllers.StaffController.taxCalculation(request: Request,staffId:String)
 
 POST     /leaveRequest             controllers.LeaveController.leaveRequest(request: Request)
-GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request, pageNumber:Int, pageSize:Int)
+GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 GET       /getLeaveRequestById     controllers.LeaveController.getLeaveRequestById(request: Request, leaveId:String)
 PUT       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, leaveId:String)
 DELETE    /deleteLeaveRequest      controllers.LeaveController.deleteLeaveRequest(request: Request, leaveId:String)
