@@ -10,14 +10,18 @@ import com.ks.proto.staff.TaxResponse;
 import com.ks.proto.user.User;
 import com.ks.proto.user.UserRole;
 import model.*;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import javax.inject.Inject;
 
-@Mapper
+@Mapper(
+        componentModel = "spring",
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED
+)
 public interface MapperConfig {
     @Inject
     MapperConfig INSTANCE = Mappers.getMapper(MapperConfig.class);
