@@ -16,7 +16,7 @@ POST    /uploadImage                controllers.StaffController.uploadImage(requ
 GET     /taxCalculation             controllers.StaffController.taxCalculation(request: Request,staffId:String)
 
 POST     /leaveRequest             controllers.LeaveController.leaveRequest(request: Request)
-GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request)
+GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request, pageNumber:Int, pageSize:Int)
 GET       /getLeaveRequestById     controllers.LeaveController.getLeaveRequestById(request: Request, leaveId:String)
 PUT       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, leaveId:String)
 DELETE    /deleteLeaveRequest      controllers.LeaveController.deleteLeaveRequest(request: Request, leaveId:String)
