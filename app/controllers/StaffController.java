@@ -30,8 +30,8 @@ public class StaffController extends Controller {
         return staffService.getStaffById(request,id);
     }
 
-    public CompletionStage<Result> getAllStaff(Http.Request request) {
-        return staffService.getAllStaff(request);
+    public CompletionStage<Result> getAllStaff(Http.Request request,int pageNumber, int pageSize) {
+        return staffService.getAllStaff(request,pageNumber,pageSize);
     }
 
     public CompletionStage<Result> updateStaff(Http.Request request, String id) {
