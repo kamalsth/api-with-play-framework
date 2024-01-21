@@ -53,7 +53,7 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
-    public CompletionStage<Result> getAllLeaveRequest(Http.Request request) {
+    public CompletionStage<Result> getAllLeaveRequest(Http.Request request, int pageNumber, int pageSize) {
         LeaveServiceGrpc.LeaveServiceBlockingStub leaveService = createLeaveServiceStub(request);
 
         if (leaveService == null) {
@@ -63,7 +63,7 @@ public class LeaveServiceImpl implements LeaveService {
         List<LeaveRequestModel> leaveRequestModels = new ArrayList<>();
 
         try {
-            LeaveListResponse leaveListResponse = leaveService.getLeaveList(com.google.protobuf.Empty.newBuilder().build()).next();
+            LeaveListResponse leaveListResponse = leaveService.getLeaveList(LeaveListRequest.newBuilder().setPageNumber(pageNumber).setPageSize(pageSize).build()).next();
             leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
                 leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
             });
