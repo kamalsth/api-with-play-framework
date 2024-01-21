@@ -15,7 +15,7 @@ public interface StaffService {
 
     CompletionStage<Result> deleteStaff(Http.Request request, String id);
 
-    CompletionStage<Result> getAllStaff(Http.Request request);
+    CompletionStage<Result> getAllStaff(Http.Request request, int pageNumber, int pageSize);
 
 
     CompletionStage<Result> taxCalculation(Http.Request request, String id);

@@ -3,7 +3,6 @@ package service.serviceimpl;
 import com.ks.proto.common.StatusResponse;
 import com.ks.proto.staff.*;
 import config.MapperConfig;
-import exception.HandleGrpcException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
@@ -128,13 +127,15 @@ public class StaffServiceImpl implements StaffService {
 
 
     @Override
-    public CompletionStage<Result> getAllStaff(Http.Request request) {
+    public CompletionStage<Result> getAllStaff(Http.Request request, int pageNumber, int pageSize) {
 
         StaffServiceGrpc.StaffServiceBlockingStub staffService = createStaffServiceStub(request);
         if (staffService == null) {
             return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
         }
         StaffListRequest staffRequest = StaffListRequest.newBuilder()
+                .setPageNumber(pageNumber)
+                .setPageSize(pageSize)
                 .build();
 
         List<Staff> staffList = new ArrayList<>();
