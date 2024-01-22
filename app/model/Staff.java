@@ -15,8 +15,12 @@ public class Staff {
     private double salary;
     private MaritalStatus maritalStatus;
     private String email;
+    private double socialSecurityFund;
+    private double employeesProvidentFund;
+    private double citizenInvestmentTrust;
+    private double insurance;
 
-    public Staff(String staffId, String name, String personalPhone, String emergencyContactNumber, String position, String citizenshipPhoto, String contactDocPdf, long joinDate, long contactRenewDate, double salary, MaritalStatus maritalStatus, String email) {
+    public Staff(String staffId, String name, String personalPhone, String emergencyContactNumber, String position, String citizenshipPhoto, String contactDocPdf, long joinDate, long contactRenewDate, double salary, MaritalStatus maritalStatus, String email, double socialSecurityFund, double employeesProvidentFund, double citizenInvestmentTrust, double insurance) {
         this.staffId = staffId;
         this.name = name;
         this.personalPhone = personalPhone;
@@ -29,6 +33,10 @@ public class Staff {
         this.salary = salary;
         this.maritalStatus = maritalStatus;
         this.email = email;
+        this.socialSecurityFund = socialSecurityFund;
+        this.employeesProvidentFund = employeesProvidentFund;
+        this.citizenInvestmentTrust = citizenInvestmentTrust;
+        this.insurance = insurance;
     }
 
     public Staff(){
@@ -131,5 +139,35 @@ public class Staff {
         this.email = email;
     }
 
+    public double getSocialSecurityFund() {
+        return socialSecurityFund;
+    }
 
+    public void setSocialSecurityFund(double socialSecurityFund) {
+        this.socialSecurityFund = socialSecurityFund;
+    }
+
+    public double getEmployeesProvidentFund() {
+        return employeesProvidentFund;
+    }
+
+    public void setEmployeesProvidentFund(double employeesProvidentFund) {
+        this.employeesProvidentFund = employeesProvidentFund;
+    }
+
+    public double getCitizenInvestmentTrust() {
+        return citizenInvestmentTrust;
+    }
+
+    public void setCitizenInvestmentTrust(double citizenInvestmentTrust) {
+        this.citizenInvestmentTrust = citizenInvestmentTrust;
+    }
+
+    public double getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(double insurance) {
+        this.insurance = insurance;
+    }
 }
