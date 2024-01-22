@@ -42,6 +42,10 @@ public class StaffServiceImpl implements StaffService {
                         .setSalary(staff.getSalary())
                         .setMaritalStatus(MaritalStatus.valueOf(staff.getMaritalStatus().name()))
                         .setEmail(staff.getEmail())
+                        .setSocialSecurityFund(staff.getSocialSecurityFund())
+                        .setEmployeesProvidentFund(staff.getEmployeesProvidentFund())
+                        .setCitizenInvestmentTrust(staff.getCitizenInvestmentTrust())
+                        .setInsurance(staff.getInsurance())
                         .build())
                 .build();
 
@@ -95,6 +99,10 @@ public class StaffServiceImpl implements StaffService {
                         .setSalary(staff.getSalary())
                         .setMaritalStatus(MaritalStatus.valueOf(staff.getMaritalStatus().name()))
                         .setEmail(staff.getEmail())
+                        .setSocialSecurityFund(staff.getSocialSecurityFund())
+                        .setEmployeesProvidentFund(staff.getEmployeesProvidentFund())
+                        .setCitizenInvestmentTrust(staff.getCitizenInvestmentTrust())
+                        .setInsurance(staff.getInsurance())
                         .build())
                 .build();
 
