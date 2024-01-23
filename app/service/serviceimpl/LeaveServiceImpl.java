@@ -160,6 +160,27 @@ public class LeaveServiceImpl implements LeaveService {
         }
     }
 
+    @Override
+    public CompletionStage<Result> getAllLeaveRequestByUser(Http.Request request, int pageNumber, int pageSize) {
+        LeaveServiceGrpc.LeaveServiceBlockingStub leaveService = createLeaveServiceStub(request);
+
+        if (leaveService == null) {
+            return CompletableFuture.completedFuture(Results.unauthorized("Unauthorized !! Invalid token"));
+        }
+
+        List<LeaveRequestModel> leaveRequestModels = new ArrayList<>();
+
+        try {
+            LeaveListResponse leaveListResponse = leaveService.getLeaveRequestListByUser(LeaveListRequest.newBuilder().setPageNumber(pageNumber).setPageSize(pageSize).build()).next();
+            leaveListResponse.getLeaveResponseList().forEach(leaveResponse -> {
+                leaveRequestModels.add(MapperConfig.INSTANCE.mapToLeaveRequestModel(leaveResponse));
+            });
+            return CompletableFuture.completedFuture(ok(Json.toJson(leaveRequestModels)));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
+    }
+
 
     private LeaveServiceGrpc.LeaveServiceBlockingStub createLeaveServiceStub(Http.Request request) {
         String jwtToken = request.headers().get("Authorization").orElse("");

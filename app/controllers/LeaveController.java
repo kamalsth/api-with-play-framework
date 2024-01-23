@@ -23,6 +23,10 @@ public class LeaveController {
         return leaveService.getAllLeaveRequest(request, pageNumber, pageSize);
     }
 
+    public CompletionStage<Result> getAllLeaveRequestByUser(Http.Request request, int pageNumber, int pageSize) {
+        return leaveService.getAllLeaveRequestByUser(request, pageNumber, pageSize);
+    }
+
     public CompletionStage<Result> getLeaveRequestById(Http.Request request, String id) {
         return leaveService.getLeaveRequestById(request, id);
     }
