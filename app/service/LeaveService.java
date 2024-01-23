@@ -17,4 +17,6 @@ public interface LeaveService {
     CompletionStage<Result> deleteLeaveRequest(Http.Request request, String id);
 
     CompletionStage<Result> confirmLeaveRequest(Http.Request request);
+
+    CompletionStage<Result> getAllLeaveRequestByUser(Http.Request request, int pageNumber, int pageSize);
 }

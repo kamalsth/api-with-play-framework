@@ -25,6 +25,7 @@ GET       /getLeaveRequestById     controllers.LeaveController.getLeaveRequestBy
 PUT       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, leaveId:String)
 DELETE    /deleteLeaveRequest      controllers.LeaveController.deleteLeaveRequest(request: Request, leaveId:String)
 PUT       /confirmLeaveRequest     controllers.LeaveController.confirmLeaveRequest(request: Request)
+GET       /getAllLeaveRequestByUser controllers.LeaveController.getAllLeaveRequestByUser(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 
 
 
