@@ -31,4 +31,8 @@ public class AuthController extends Controller {
         return authService.register(request);
     }
 
+    public CompletionStage<Result> aboutMe(Http.Request request) {
+        return authService.aboutMe(request);
+    }
+
 }

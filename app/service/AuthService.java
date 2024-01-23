@@ -12,4 +12,5 @@ public interface AuthService {
 
     CompletionStage<Result> register(Http.Request request);
 
+    CompletionStage<Result> aboutMe(Http.Request request);
 }

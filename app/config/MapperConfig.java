@@ -6,8 +6,8 @@ import com.ks.proto.leave.LeaveResponse;
 import com.ks.proto.leave.LeaveStatus;
 import com.ks.proto.staff.StaffResponse;
 import com.ks.proto.staff.TaxCalResponse;
-import com.ks.proto.staff.TaxResponse;
 import com.ks.proto.user.User;
+import com.ks.proto.user.UserResponse;
 import com.ks.proto.user.UserRole;
 import model.*;
 import org.mapstruct.*;
@@ -42,6 +42,15 @@ public interface MapperConfig {
     @Mapping(source = "role", target = "role", qualifiedByName = "mapStringToRole")
     @Mapping(target = "userId", ignore = true)
     User mapToUser(Register registerRequest);
+
+    @Mapping(source = "role", target = "role", qualifiedByName = "mapRoleToString")
+    UserDetail mapToUserDetail(UserResponse userResponse);
+
+    @Named("mapRoleToString")
+    default String mapRoleToString(UserRole role) {
+        return role.name();
+    }
+
     @Named("mapStringToRole")
     default UserRole mapStringToRole(String role) {
         return UserRole.valueOf(role);
@@ -75,7 +84,9 @@ public interface MapperConfig {
     @Mapping(source = "leaveStatus", target = "leaveStatus", qualifiedByName = "mapStringToLeaveStatus")
     ConfirmLeaveRequest mapToConfirmLEaveRequestProto(model.ConfirmLeaveRequest confirmLeaveRequest);
 
-    Tax mapToTax(TaxResponse taxResponse);
 
     TaxCalculation mapToTaxCal(TaxCalResponse taxResponse);
+
+
+
 }
