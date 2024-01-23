@@ -35,4 +35,8 @@ public class AuthController extends Controller {
         return authService.aboutMe(request);
     }
 
+    public CompletionStage<Result> changePassword(Http.Request request) {
+        return authService.changePassword(request);
+    }
+
 }

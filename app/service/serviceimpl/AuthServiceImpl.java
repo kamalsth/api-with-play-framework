@@ -5,13 +5,13 @@ import com.ks.proto.auth.AuthServiceGrpc;
 import com.ks.proto.auth.LoginResponse;
 import com.ks.proto.auth.RegisterRequest;
 import com.ks.proto.common.StatusResponse;
-import com.ks.proto.staff.StaffServiceGrpc;
 import com.ks.proto.user.UserResponse;
 import config.MapperConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Metadata;
 import io.grpc.stub.MetadataUtils;
+import model.ChangePassword;
 import model.Login;
 import model.Register;
 import play.libs.Json;
@@ -71,6 +71,21 @@ public class AuthServiceImpl implements AuthService {
             return ExceptionUtils.handleException(e);
         }
 
+    }
+
+    @Override
+    public CompletionStage<Result> changePassword(Http.Request request) {
+        ChangePassword changePassword = Json.fromJson(request.body().asJson(), ChangePassword.class);
+        AuthServiceGrpc.AuthServiceBlockingStub authService = createBlockingStub(request);
+        if (authService == null) {
+            return CompletableFuture.completedFuture(unauthorized("Unauthorized !! Invalid token"));
+        }
+        try {
+            StatusResponse statusResponse = authService.changePassword(MapperConfig.INSTANCE.mapToChangePasswordRequest(changePassword));
+            return CompletableFuture.completedFuture(ok(Json.toJson(statusResponse.getStatus())));
+        } catch (Exception e) {
+            return ExceptionUtils.handleException(e);
+        }
     }
 
     private AuthServiceGrpc.AuthServiceBlockingStub createAuthServiceStub() {

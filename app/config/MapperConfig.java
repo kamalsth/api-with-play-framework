@@ -6,6 +6,7 @@ import com.ks.proto.leave.LeaveResponse;
 import com.ks.proto.leave.LeaveStatus;
 import com.ks.proto.staff.StaffResponse;
 import com.ks.proto.staff.TaxCalResponse;
+import com.ks.proto.user.ChangePasswordRequest;
 import com.ks.proto.user.User;
 import com.ks.proto.user.UserResponse;
 import com.ks.proto.user.UserRole;
@@ -88,5 +89,5 @@ public interface MapperConfig {
     TaxCalculation mapToTaxCal(TaxCalResponse taxResponse);
 
 
-
+    ChangePasswordRequest mapToChangePasswordRequest(ChangePassword changePassword);
 }
