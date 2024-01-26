@@ -28,6 +28,12 @@ PUT       /confirmLeaveRequest     controllers.LeaveController.confirmLeaveReque
 GET       /getAllLeaveRequestByUser controllers.LeaveController.getAllLeaveRequestByUser(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 
 
+POST       /addNotice             controllers.NoticeController.addNotice(request: Request)
+GET        /getAllNotice          controllers.NoticeController.getAllNotice(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
+PUT        /updateNotice          controllers.NoticeController.updateNotice(request: Request, noticeId:String)
+DELETE     /deleteNotice          controllers.NoticeController.deleteNotice(request: Request, noticeId:String)
+
+
 
 
 
