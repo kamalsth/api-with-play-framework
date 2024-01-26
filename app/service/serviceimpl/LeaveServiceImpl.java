@@ -149,7 +149,6 @@ public class LeaveServiceImpl implements LeaveService {
         if(request.body().asJson().get("leaveStatus").asText().isEmpty() || request.body().asJson().get("id").asText().isEmpty()){
             return CompletableFuture.completedFuture(Results.badRequest("Empty field !!"));
         }
-
         model.ConfirmLeaveRequest confirmLeaveRequest = Json.fromJson(request.body().asJson(), model.ConfirmLeaveRequest.class);
         LeaveServiceGrpc.LeaveServiceBlockingStub leaveService = createLeaveServiceStub(request);
 
