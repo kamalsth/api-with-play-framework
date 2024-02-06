@@ -13,7 +13,7 @@ POST    /changePassword             controllers.AuthController.changePassword(re
 POST    /addStaff                   controllers.StaffController.addStaff(request: Request)
 GET     /getStaffById               controllers.StaffController.getStaffById(request: Request, staffId:String)
 GET     /getAllStaff                controllers.StaffController.getAllStaff(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
-PUT     /updateStaff                controllers.StaffController.updateStaff(request: Request, staffId:String)
+PATCH     /updateStaff                controllers.StaffController.updateStaff(request: Request, staffId:String)
 DELETE  /deleteStaff                controllers.StaffController.deleteStaff(request: Request,staffId:String)
 POST    /uploadFile                 controllers.StaffController.uploadFile(request: Request,staffId:String)
 POST    /uploadImage                controllers.StaffController.uploadImage(request: Request,staffId:String)
@@ -22,15 +22,15 @@ GET     /taxCalculation             controllers.StaffController.taxCalculation(r
 POST     /leaveRequest             controllers.LeaveController.leaveRequest(request: Request)
 GET       /getAllLeaveRequest      controllers.LeaveController.getAllLeaveRequest(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 GET       /getLeaveRequestById     controllers.LeaveController.getLeaveRequestById(request: Request, leaveId:String)
-PUT       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, leaveId:String)
+PATCH       /updateLeaveRequest      controllers.LeaveController.updateLeaveRequest(request: Request, leaveId:String)
 DELETE    /deleteLeaveRequest      controllers.LeaveController.deleteLeaveRequest(request: Request, leaveId:String)
-PUT       /confirmLeaveRequest     controllers.LeaveController.confirmLeaveRequest(request: Request)
+PATCH       /confirmLeaveRequest     controllers.LeaveController.confirmLeaveRequest(request: Request)
 GET       /getAllLeaveRequestOfUser controllers.LeaveController.getAllLeaveRequestByUser(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
 
 
 POST       /addNotice             controllers.NoticeController.addNotice(request: Request)
 GET        /getAllNotice          controllers.NoticeController.getAllNotice(request: Request, pageNumber:Int?=0, pageSize:Int?=10)
-PUT        /updateNotice          controllers.NoticeController.updateNotice(request: Request, noticeId:String)
+PATCH        /updateNotice          controllers.NoticeController.updateNotice(request: Request, noticeId:String)
 DELETE     /deleteNotice          controllers.NoticeController.deleteNotice(request: Request, noticeId:String)
 
 
